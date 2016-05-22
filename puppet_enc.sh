@@ -29,20 +29,15 @@ CLASSES=""
 #  - "%{::environment}/hieradata/common"
 
   
+role=$(echo $CERTNAME | cut -d. -f1 | cut -d- -f1 | sed -e 's/[0-9][0-9]*$//g')
 cluster=$(echo $CERTNAME | cut -d. -f1 | cut -d- -f2 -s)
-if echo $CERTNAME | grep -q -e "^stash"; then
-        PARAMETERS[cluster]=${cluster:-""}
-        PARAMETERS[role]="attlasian_stash"
-elif echo $CERTNAME | grep -q -e "^tomcat"; then
-        PARAMETERS[cluster]=${cluster:-""}
-        PARAMETERS[role]="tomcat_appserver"
-elif echo $CERTNAME | grep -q -e "^mysql"; then
-        PARAMETERS[cluster]=${cluster:-""}
-        PARAMETERS[role]="mysqlserver"
-elif echo $CERTNAME | grep -q -e "^webserver"; then
-        PARAMETERS[cluster]=${cluster:-""}
-        PARAMETERS[role]="webserver"
-fi
+topic=$(echo $CERTNAME | cut -d. -f1 | cut -d- -f3 -s)
+location=$(echo $CERTNAME | cut -d. -f1 | cut -d- -f4 -s)
+
+PARAMETERS[cluster]=${cluster:-""}
+PARAMETERS[role]=${role:-""}
+PARAMETERS[topic]=${topic:-""}
+PARAMETERS[location]=${location:-""}
 
 #### Output the yaml ...
 export PARAMETERS
@@ -58,7 +53,9 @@ if [ -n "$ENVIRONMENT" ]; then
 fi
 echo "parameters:"
 for i in "${!PARAMETERS[@]}"; do 
-	echo "  $i: ${PARAMETERS[$i]}"
+	if [ -n "${PARAMETERS[$i]}" ]; then 
+		echo "  $i: ${PARAMETERS[$i]}"
+	fi
 done
 
 ## Note: If this script exits with RC != 0, puppet aborts the run and uses
