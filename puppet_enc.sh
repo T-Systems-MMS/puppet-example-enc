@@ -13,6 +13,10 @@ LOG_TAG="PUPPET_CODE_PIPELINE"
 
 logger -p user.notice -t $LOG_TAG "ENC Called with '$0 $*' at $(date) on $(hostname)"
 
+## Enable the next line to use foreman as ENC
+# exec /usr/local/bin/foreman_enc-foremanlocal.rb "$@"
+
+
 declare -A PARAMETERS
 ENVIRONMENT=""
 CLASSES=""
