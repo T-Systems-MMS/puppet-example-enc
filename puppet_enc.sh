@@ -28,7 +28,6 @@ CLASSES=""
 #  - "%{::environment}/hieradata/location/%{::location}"
 #  - "%{::environment}/hieradata/common"
 
-  
 role=$(echo $CERTNAME | cut -d. -f1 | cut -d- -f1 | sed -e 's/[0-9][0-9]*$//g')
 cluster=$(echo $CERTNAME | cut -d. -f1 | cut -d- -f2 -s)
 topic=$(echo $CERTNAME | cut -d. -f1 | cut -d- -f3 -s)
